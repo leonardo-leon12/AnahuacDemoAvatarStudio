@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Avatar Studio - Intevolution</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Axios -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous"
+        />
+        <!-- Optional: Remove jQuery if not needed in your scripts -->
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Your CSS files -->
+        <link rel="stylesheet" href="/src/styles.css" />
+        <link rel="stylesheet" href="./src/stylesAvatar.css" />
+    </head>
+    <header>
+        <a href="/" class="logo-nav">
+            <img src="/src/img/LogoRUA_HUB_1.png" alt="logo" />
+        </a>
+    </header>
+    <div class="header-space"></div>
+
+    <main class="main-avatar-container">
+        <div class="avatar-video-container">
+            <video
+                id="mediaElement"
+                class="w-full border rounded-lg"
+                autoplay
+            ></video>
+        </div>
+
+        <div class="avatar-control-container">
+            <div class="tabs-container">
+                <!-- Tab Menu -->
+                <ul class="nav nav-tabs" id="tabMenu" role="tablist">
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            id="chat-tab"
+                            data-toggle="tab"
+                            href="#chat"
+                            role="tab"
+                            aria-controls="chat"
+                            aria-selected="true"
+                            >Chat</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            id="voz-tab"
+                            data-toggle="tab"
+                            href="#voz"
+                            role="tab"
+                            aria-controls="voz"
+                            aria-selected="false"
+                            >Voz</a
+                        >
+                    </li>
+                </ul>
+                <div class="tab-content" id="tabContent">
+                    <!-- Chat Tab -->
+                    <div
+                        class="tab-pane fade show active p-1"
+                        id="chat"
+                        role="tabpanel"
+                        aria-labelledby="chat-tab"
+                    >
+                        <div class="form-group">
+                            <label for="taskInput">Chat</label>
+                            <div class="input-group">
+                                <input
+                                    id="taskInput"
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Escribe un chat..."
+                                />
+                                <div class="input-group-append">
+                                    <button id="talkBtn" class="avatar-button">
+                                        Enviar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chatDisplay"></div>
+                    </div>
+                    <!-- Voz Tab -->
+                    <div
+                        class="tab-pane fade voice-tab"
+                        id="voz"
+                        role="tabpanel"
+                        aria-labelledby="voz-tab"
+                    >
+                        <!-- Bootstrap Alert -->
+                        <div
+                            id="browser-alert"
+                            class="alert alert-danger"
+                            role="alert"
+                            style="display: none"
+                        >
+                            Tu navegador no soporta la funcionalidad de
+                            grabación de audio. Por favor, utiliza CHROME.
+                        </div>
+                        <div
+                            class="avatar-button-container voice-btn-container"
+                        >
+                            <button id="start-btn" class="avatar-button">
+                                <span class="material-icons"> mic </span>
+                                <span>Grabar</span>
+                            </button>
+                        </div>
+                        <div class="avatar-input-container">
+                            <textarea
+                                id="transcript"
+                                class="form-control"
+                                rows="1"
+                                placeholder="La transcripción aparecerá aquí..."
+                                readonly
+                            ></textarea>
+                            <canvas id="waveform"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="avatar-input-container">
+                <div>
+                    <label for="avatarID"> Avatar Studio </label>
+                    <select
+                        id="avatarID"
+                        class="form-control avatar-input"
+                    ></select>
+                </div>
+                <div>
+                    <label for="voiceID"> Voz del Avatar</label>
+                    <select
+                        id="voiceID"
+                        class="form-control avatar-input"
+                    ></select>
+                </div>
+                <div>
+                    <label for="kbID"> Base de conocimientos </label>
+                    <select
+                        id="kbID"
+                        class="form-control avatar-input"
+                    ></select>
+                </div>
+                <div>
+                    <label for="password"> Contraseña </label>
+                    <input
+                        id="password"
+                        class="form-control avatar-input"
+                        type="password"
+                    />
+                </div>
+            </div>
+            <div class="avatar-button-container">
+                <button id="startBtn" class="avatar-button">
+                    Conectar Avatar
+                </button>
+                <button id="closeBtn" class="avatar-button">Cerrar</button>
+            </div>
+        </div>
+    </main>
+    <!-- Your JavaScript file -->
+    <script type="module" src="/src/handleAvatarSession.js"></script>
+    <!-- jQuery (required by Bootstrap 4) -->
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"
+    ></script>
+
+    <!-- Popper.js -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"
+    ></script>
+
+    <!-- Bootstrap JS -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"
+    ></script>
+</html>
